@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GPS Map</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>Realtime GPS Map</title>
     <style>
-        #map { height: 300px; width: 100%; }
+        /* Set the size of the map */
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+
+        /* Style the button */
         .button {
-            background-color: #4CAF50;
+            background-color: #4CAF50; /* Green */
             border: none;
             color: white;
             padding: 15px 32px;
@@ -18,25 +21,61 @@
             font-size: 16px;
             margin: 4px 2px;
             cursor: pointer;
+            border-radius: 8px;
         }
     </style>
 </head>
-<body>
-    <h1>GPS Map</h1>
+<body onload="initMap()">
+    <h1>Realtime GPS Map</h1>
+    <!-- Display map here -->
     <div id="map"></div>
-    <button class="button" onclick="openGoogleMapsNavigation()">Navigate with Google Maps</button>
+
+    <!-- Button for Google Maps navigation -->
+    <button class="button" onclick="navigateToGoogleMaps()">Navigate with Google Maps</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+
     <script>
-        var map = L.map('map').setView([0, 0], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-        var marker = L.marker([0, 0]).addTo(map);
-        function updateMap(latitude, longitude) {
-            marker.setLatLng([latitude, longitude]);
-            map.setView([latitude, longitude], 13);
+        var map; // Leaflet map object
+        var marker; // Marker object
+
+        // Initialize the map
+        function initMap() {
+            // Create a map centered at (0, 0)
+            map = L.map('map').setView([0, 0], 8);
+
+            // Add OpenStreetMap tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Create a marker
+            marker = L.marker([0, 0]).addTo(map);
         }
-        function openGoogleMapsNavigation() {
-            var url = 'https://www.google.com/maps/dir/?api=1&destination=' + marker.getLatLng().lat + ',' + marker.getLatLng().lng;
+
+        // Update map with new latitude and longitude
+        function updateMap(latitude, longitude) {
+            // Update marker position
+            marker.setLatLng([latitude, longitude]);
+
+            // Center map to new position
+            map.setView([latitude, longitude]);
+        }
+
+        // Function to handle incoming GPS data from the server
+        function handleGPSData(latitude, longitude) {
+            updateMap(latitude, longitude);
+        }
+
+        // Function to navigate to Google Maps with current location
+        function navigateToGoogleMaps() {
+            // Get latitude and longitude of the marker
+            var lat = marker.getLatLng().lat;
+            var lng = marker.getLatLng().lng;
+
+            // Open Google Maps navigation with current latitude and longitude
+            var url = 'https://www.google.com/maps/dir/?api=1&destination=' + lat + ',' + lng;
             window.open(url, '_blank');
         }
     </script>
