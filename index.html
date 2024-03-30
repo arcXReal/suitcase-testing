@@ -7,11 +7,22 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     #map { height: 400px; }
+    #navigate-button {
+      display: block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <h1>Real-Time GPS Location</h1>
   <div id="map"></div>
+  <button id="navigate-button">Navigate with Google Maps</button>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
@@ -19,7 +30,7 @@
   <script>
     // Firebase configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyCVx_dAGSzPyzPVEOtWBJD_24wdfjfL_08",
+      apiKey: "Your-API-Key",
       authDomain: "suitcase-location.firebaseapp.com",
       databaseURL: "https://suitcase-location-default-rtdb.firebaseio.com",
       projectId: "suitcase-location",
@@ -92,6 +103,15 @@
 
     longitudeRef.on('value', (snapshot) => {
       lastLongitude = parseFloat(snapshot.val());
+    });
+
+    // Add event listener to the button for navigation
+    document.getElementById('navigate-button').addEventListener('click', () => {
+      // Replace the coordinates with the latitude and longitude from Firebase
+      const latitude = lastLatitude || 0;
+      const longitude = lastLongitude || 0;
+      // Open Google Maps with the coordinates for navigation
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`);
     });
   </script>
 </body>
