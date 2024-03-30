@@ -22,7 +22,7 @@
       appId: "1:643099207427:web:5628dd80705c3f738f6b36"
     };
 
-     firebase.initializeApp(firebaseConfig);
+      firebase.initializeApp(firebaseConfig);
 
     const db = firebase.database();
     const valuesRef = db.ref('/randomValue');
@@ -30,6 +30,7 @@
     valuesRef.on('value', (snapshot) => {
       const value = snapshot.val();
       document.getElementById('values').innerText = `Random Value: ${value}`;
+      console.log(value); // Output the value to the console for debugging
     });
   </script>
 </body>
