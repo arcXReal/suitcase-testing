@@ -86,11 +86,11 @@
     }
 
     // Store the last latitude and longitude
-    latitudeRef.on('value', (snapshot) => {
+    latitudeRef.onValue((snapshot) => {
       lastLatitude = snapshot.val();
     });
 
-    longitudeRef.on('value', (snapshot) => {
+    longitudeRef.onValue((snapshot) => {
       lastLongitude = snapshot.val();
     });
   </script>
