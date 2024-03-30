@@ -44,23 +44,6 @@
     // Initialize marker
     let marker;
 
-    // Listen for changes in the latitude and longitude nodes
-    get(latitudeRef, (snapshot) => {
-      const latitude = parseFloat(snapshot.val());
-      const longitude = getLastLongitude();
-      console.log("Latitude:", latitude);
-      console.log("Longitude:", longitude);
-      updateMarker(latitude, longitude);
-    });
-
-    get(longitudeRef, (snapshot) => {
-      const longitude = parseFloat(snapshot.val());
-      const latitude = getLastLatitude();
-      console.log("Latitude:", latitude);
-      console.log("Longitude:", longitude);
-      updateMarker(latitude, longitude);
-    });
-
     // Function to update marker position
     function updateMarker(latitude, longitude) {
       // Check if latitude and longitude are valid
@@ -77,6 +60,23 @@
         console.error("Invalid latitude or longitude:", latitude, longitude);
       }
     }
+
+    // Listen for changes in the latitude and longitude nodes
+    get(latitudeRef, (snapshot) => {
+      const latitude = parseFloat(snapshot.val());
+      const longitude = getLastLongitude();
+      console.log("Latitude:", latitude);
+      console.log("Longitude:", longitude);
+      updateMarker(latitude, longitude);
+    });
+
+    get(longitudeRef, (snapshot) => {
+      const longitude = parseFloat(snapshot.val());
+      const latitude = getLastLatitude();
+      console.log("Latitude:", latitude);
+      console.log("Longitude:", longitude);
+      updateMarker(latitude, longitude);
+    });
 
     // Helper functions to store and retrieve the last latitude and longitude
     let lastLatitude = null;
