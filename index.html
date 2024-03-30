@@ -7,7 +7,7 @@
 </head>
 <body>
   <h1>Real-Time Values</h1>
-  <div id="values"></div>
+  <div id="values">Loading...</div>
 
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
@@ -15,35 +15,20 @@
     const firebaseConfig = {
       apiKey: "AIzaSyCVx_dAGSzPyzPVEOtWBJD_24wdfjfL_08",
       authDomain: "suitcase-location.firebaseapp.com",
-      databaseURL: "https://suitcase-location-default-rtdb.firebaseio.com",
       projectId: "suitcase-location",
       storageBucket: "suitcase-location.appspot.com",
       messagingSenderId: "643099207427",
       appId: "1:643099207427:web:5628dd80705c3f738f6b36"
     };
 
-       // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
-    // Get a reference to the database service
-    const database = firebase.database();
+    const db = firebase.database();
+    const valuesRef = db.ref('/randomValue');
 
-    // Reference to the "randomValue" node
-    const randomValueRef = database.ref('randomValue');
-
-    // Function to update the value in the HTML
-    function updateValue(value) {
-      document.getElementById('values').innerText = `Random Value: ${value}`;
-    }
-
-    // Listen for changes in the "randomValue" node
-    randomValueRef.on('value', (snapshot) => {
+    valuesRef.on('value', (snapshot) => {
       const value = snapshot.val();
-      if (value !== null) {
-        updateValue(value);
-      } else {
-        console.error("Value is null");
-      }
+      document.getElementById('values').innerText = `Random Value: ${value}`;
     });
   </script>
 </body>
