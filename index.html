@@ -57,13 +57,17 @@
 
     // Function to update marker position
     function updateMarker(latitude, longitude) {
-      if (latitude !== null && longitude !== null) {
+      // Check if latitude and longitude are valid
+      if (latitude !== null && longitude !== null && !isNaN(latitude) && !isNaN(longitude)) {
         if (!marker) {
           marker = L.marker([latitude, longitude]).addTo(map);
         } else {
           marker.setLatLng([latitude, longitude]);
         }
         map.setView([latitude, longitude], 13);
+      } else {
+        // Handle invalid latitude or longitude
+        console.error("Invalid latitude or longitude:", latitude, longitude);
       }
     }
   </script>
