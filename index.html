@@ -22,15 +22,28 @@
       appId: "1:643099207427:web:5628dd80705c3f738f6b36"
     };
 
-      firebase.initializeApp(firebaseConfig);
+       // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
 
-    const db = firebase.database();
-    const valuesRef = db.ref('/randomValue');
+    // Get a reference to the database service
+    const database = firebase.database();
 
-    valuesRef.on('value', (snapshot) => {
-      const value = snapshot.val();
+    // Reference to the "randomValue" node
+    const randomValueRef = database.ref('randomValue');
+
+    // Function to update the value in the HTML
+    function updateValue(value) {
       document.getElementById('values').innerText = `Random Value: ${value}`;
-      console.log(value); // Output the value to the console for debugging
+    }
+
+    // Listen for changes in the "randomValue" node
+    randomValueRef.on('value', (snapshot) => {
+      const value = snapshot.val();
+      if (value !== null) {
+        updateValue(value);
+      } else {
+        console.error("Value is null");
+      }
     });
   </script>
 </body>
