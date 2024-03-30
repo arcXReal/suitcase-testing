@@ -47,12 +47,14 @@
     // Listen for changes in the latitude and longitude nodes
     onValue(latitudeRef, (snapshot) => {
       const latitude = snapshot.val();
-      updateMarker(latitude);
+      const longitude = getLastLongitude();
+      updateMarker(latitude, longitude);
     });
 
     onValue(longitudeRef, (snapshot) => {
       const longitude = snapshot.val();
-      updateMarker(null, longitude);
+      const latitude = getLastLatitude();
+      updateMarker(latitude, longitude);
     });
 
     // Function to update marker position
@@ -70,6 +72,27 @@
         console.error("Invalid latitude or longitude:", latitude, longitude);
       }
     }
+
+    // Helper functions to store and retrieve the last latitude and longitude
+    let lastLatitude = null;
+    let lastLongitude = null;
+
+    function getLastLatitude() {
+      return lastLatitude;
+    }
+
+    function getLastLongitude() {
+      return lastLongitude;
+    }
+
+    // Store the last latitude and longitude
+    latitudeRef.on('value', (snapshot) => {
+      lastLatitude = snapshot.val();
+    });
+
+    longitudeRef.on('value', (snapshot) => {
+      lastLongitude = snapshot.val();
+    });
   </script>
 </body>
 </html>
