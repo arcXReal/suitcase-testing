@@ -1,0 +1,14 @@
+# Global settings
+[build]
+  command = "npm run build"    # Build command for your project
+  publish = "public"            # Directory to deploy
+
+# Environment variables
+[build.environment]
+  NODE_ENV = "production"      # Set NODE_ENV to "production"
+
+# Redirects
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
