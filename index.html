@@ -9,10 +9,10 @@
   <h1>Real-Time Random Value</h1>
   <div id="randomValue">Loading...</div>
 
-<script type="module">
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
     import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
-  <script>
+
     // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCVx_dAGSzPyzPVEOtWBJD_24wdfjfL_08",
@@ -24,7 +24,7 @@
       appId: "1:643099207427:web:5628dd80705c3f738f6b36"
     };
 
-   // Initialize Firebase
+ // Initialize Firebase
     const firebaseApp = initializeApp(firebaseConfig);
     const db = getDatabase(firebaseApp);
     const randomValueRef = ref(db, '/randomValue');
