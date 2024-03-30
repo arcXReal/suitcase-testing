@@ -20,13 +20,13 @@
 
     // Firebase configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyCVx_dAGSzPyzPVEOtWBJD_24wdfjfL_08",
-      authDomain: "suitcase-location.firebaseapp.com",
-      databaseURL: "https://suitcase-location-default-rtdb.firebaseio.com",
-      projectId: "suitcase-location",
-      storageBucket: "suitcase-location.appspot.com",
-      messagingSenderId: "643099207427",
-      appId: "1:643099207427:web:5628dd80705c3f738f6b36"
+      apiKey: "Your-API-Key",
+      authDomain: "Your-Auth-Domain",
+      databaseURL: "Your-Database-URL",
+      projectId: "Your-Project-Id",
+      storageBucket: "Your-Storage-Bucket",
+      messagingSenderId: "Your-Messaging-Sender-Id",
+      appId: "Your-App-Id"
     };
 
     // Initialize Firebase
@@ -48,12 +48,16 @@
     get(latitudeRef, (snapshot) => {
       const latitude = snapshot.val();
       const longitude = getLastLongitude();
+      console.log("Latitude:", latitude);
+      console.log("Longitude:", longitude);
       updateMarker(latitude, longitude);
     });
 
     get(longitudeRef, (snapshot) => {
       const longitude = snapshot.val();
       const latitude = getLastLatitude();
+      console.log("Latitude:", latitude);
+      console.log("Longitude:", longitude);
       updateMarker(latitude, longitude);
     });
 
@@ -61,6 +65,7 @@
     function updateMarker(latitude, longitude) {
       // Check if latitude and longitude are valid
       if (latitude !== null && longitude !== null && !isNaN(latitude) && !isNaN(longitude)) {
+        console.log("Updating marker with Latitude:", latitude, "Longitude:", longitude);
         if (!marker) {
           marker = L.marker([latitude, longitude]).addTo(map);
         } else {
