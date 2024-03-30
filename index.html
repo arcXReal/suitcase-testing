@@ -16,7 +16,7 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-    import { getDatabase, ref, on } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
 
     // Firebase configuration
     const firebaseConfig = {
@@ -45,13 +45,13 @@
     let marker;
 
     // Listen for changes in the latitude and longitude nodes
-    on(latitudeRef, 'value', (snapshot) => {
+    get(latitudeRef, (snapshot) => {
       const latitude = snapshot.val();
       const longitude = getLastLongitude();
       updateMarker(latitude, longitude);
     });
 
-    on(longitudeRef, 'value', (snapshot) => {
+    get(longitudeRef, (snapshot) => {
       const longitude = snapshot.val();
       const latitude = getLastLatitude();
       updateMarker(latitude, longitude);
@@ -86,11 +86,11 @@
     }
 
     // Store the last latitude and longitude
-    on(latitudeRef, 'value', (snapshot) => {
+    get(latitudeRef, (snapshot) => {
       lastLatitude = snapshot.val();
     });
 
-    on(longitudeRef, 'value', (snapshot) => {
+    get(longitudeRef, (snapshot) => {
       lastLongitude = snapshot.val();
     });
   </script>
