@@ -3,32 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Real-Time Values</title>
+  <title>Real-Time Random Value</title>
 </head>
 <body>
-  <h1>Real-Time Values</h1>
-  <div id="values">Loading...</div>
+  <h1>Real-Time Random Value</h1>
+  <div id="randomValue">Loading...</div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+  <!-- Firebase JavaScript SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js"></script>
+
   <script>
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCVx_dAGSzPyzPVEOtWBJD_24wdfjfL_08",
       authDomain: "suitcase-location.firebaseapp.com",
+      databaseURL: "https://suitcase-location-default-rtdb.firebaseio.com",
       projectId: "suitcase-location",
       storageBucket: "suitcase-location.appspot.com",
       messagingSenderId: "643099207427",
       appId: "1:643099207427:web:5628dd80705c3f738f6b36"
     };
 
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
-    const db = firebase.database();
-    const valuesRef = db.ref('/randomValue');
+    // Reference to the randomValue node in Firebase
+    const randomValueRef = firebase.database().ref('/randomValue');
 
-    valuesRef.on('value', (snapshot) => {
-      const value = snapshot.val();
-      document.getElementById('values').innerText = `Random Value: ${value}`;
+    // Listen for changes in the randomValue node
+    randomValueRef.on('value', (snapshot) => {
+      const randomValue = snapshot.val();
+      document.getElementById('randomValue').innerText = `Random Value: ${randomValue}`;
     });
   </script>
 </body>
