@@ -46,7 +46,7 @@
 
     // Listen for changes in the latitude and longitude nodes
     get(latitudeRef, (snapshot) => {
-      const latitude = snapshot.val();
+      const latitude = parseFloat(snapshot.val());
       const longitude = getLastLongitude();
       console.log("Latitude:", latitude);
       console.log("Longitude:", longitude);
@@ -54,7 +54,7 @@
     });
 
     get(longitudeRef, (snapshot) => {
-      const longitude = snapshot.val();
+      const longitude = parseFloat(snapshot.val());
       const latitude = getLastLatitude();
       console.log("Latitude:", latitude);
       console.log("Longitude:", longitude);
@@ -64,7 +64,7 @@
     // Function to update marker position
     function updateMarker(latitude, longitude) {
       // Check if latitude and longitude are valid
-      if (latitude !== null && longitude !== null && !isNaN(latitude) && !isNaN(longitude)) {
+      if (!isNaN(latitude) && !isNaN(longitude)) {
         console.log("Updating marker with Latitude:", latitude, "Longitude:", longitude);
         if (!marker) {
           marker = L.marker([latitude, longitude]).addTo(map);
@@ -92,11 +92,11 @@
 
     // Store the last latitude and longitude
     get(latitudeRef, (snapshot) => {
-      lastLatitude = snapshot.val();
+      lastLatitude = parseFloat(snapshot.val());
     });
 
     get(longitudeRef, (snapshot) => {
-      lastLongitude = snapshot.val();
+      lastLongitude = parseFloat(snapshot.val());
     });
   </script>
 </body>
