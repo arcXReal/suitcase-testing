@@ -1,38 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Real-time GPS Map</title>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    #map {
-      height: 400px;
-      width: 100%;
-    }
-  </style>
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <title>Real-Time Values</title>
 </head>
 <body>
-  <h1>Real-time GPS Map</h1>
-  <div id="map"></div>
-  <button onclick="navigateWithGoogleMaps()">Navigate with Google Maps</button>
+  <h1>Real-Time Values</h1>
+  <div id="values"></div>
 
-  <!-- Leaflet JavaScript -->
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.6/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
   <script>
-    console.log("Initializing map...");
-    // Initialize Leaflet map
-    var map = L.map('map').setView([0, 0], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    console.log("Map initialized.");
-
-    console.log("Initializing Firebase...");
-    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCVx_dAGSzPyzPVEOtWBJD_24wdfjfL_08",
       authDomain: "suitcase-location.firebaseapp.com",
@@ -42,43 +21,16 @@
       messagingSenderId: "643099207427",
       appId: "1:643099207427:web:5628dd80705c3f738f6b36"
     };
+
     firebase.initializeApp(firebaseConfig);
-    console.log("Firebase initialized.");
 
-    console.log("Initializing database reference...");
-    // Initialize Firebase database reference
-    var database = firebase.database();
-    var gpsRef = database.ref('gps');
-    console.log("Database reference initialized.");
+    const db = firebase.database();
+    const valuesRef = db.ref('/randomValue');
 
-    console.log("Listening for GPS data changes...");
-    // Listen for changes in GPS data
-    gpsRef.on('value', function(snapshot) {
-      console.log("GPS data change detected.");
-      var gpsData = snapshot.val();
-      var latitude = gpsData.latitude;
-      var longitude = gpsData.longitude;
-      updateMap(latitude, longitude);
+    valuesRef.on('value', (snapshot) => {
+      const value = snapshot.val();
+      document.getElementById('values').innerText = `Random Value: ${value}`;
     });
-    console.log("Listening for GPS data changes complete.");
-
-    // Function to update map with GPS data
-    function updateMap(latitude, longitude) {
-      console.log("Updating map with GPS data...");
-      map.setView([latitude, longitude], 13);
-      L.marker([latitude, longitude]).addTo(map)
-        .bindPopup('Current Location')
-        .openPopup();
-      console.log("Map updated.");
-    }
-
-    // Function to navigate with Google Maps
-    function navigateWithGoogleMaps() {
-      var latitude = map.getCenter().lat;
-      var longitude = map.getCenter().lng;
-      var url = 'https://www.google.com/maps/dir/?api=1&destination=' + latitude + ',' + longitude;
-      window.open(url, '_blank');
-    }
   </script>
 </body>
 </html>
