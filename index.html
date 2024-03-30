@@ -4,14 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Real-Time GPS Location</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 400px; }
+  </style>
 </head>
 <body>
   <h1>Real-Time GPS Location</h1>
-  <div>
-    Latitude: <span id="latitude">Loading...</span><br>
-    Longitude: <span id="longitude">Loading...</span>
-  </div>
+  <div id="map"></div>
 
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
   <script>
@@ -32,15 +34,64 @@
     const latitudeRef = db.ref('latitude');
     const longitudeRef = db.ref('longitude');
 
+    // Create Leaflet map
+    const map = L.map('map').setView([0, 0], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Initialize marker
+    let marker;
+
     // Listen for changes in the latitude and longitude nodes
     latitudeRef.on('value', (snapshot) => {
       const latitude = snapshot.val();
-      document.getElementById('latitude').innerText = latitude || 'N/A';
+      const longitude = getLastLongitude();
+      updateMarker(latitude, longitude);
     });
 
     longitudeRef.on('value', (snapshot) => {
       const longitude = snapshot.val();
-      document.getElementById('longitude').innerText = longitude || 'N/A';
+      const latitude = getLastLatitude();
+      updateMarker(latitude, longitude);
+    });
+
+    // Function to update marker position
+    function updateMarker(latitude, longitude) {
+      // Check if latitude and longitude are valid
+      if (!isNaN(latitude) && !isNaN(longitude)) {
+        console.log("Updating marker with Latitude:", latitude, "Longitude:", longitude);
+        if (!marker) {
+          marker = L.marker([latitude, longitude]).addTo(map);
+        } else {
+          marker.setLatLng([latitude, longitude]);
+        }
+        map.setView([latitude, longitude], 13);
+      } else {
+        // Handle invalid latitude or longitude
+        console.error("Invalid latitude or longitude:", latitude, longitude);
+      }
+    }
+
+    // Helper functions to store and retrieve the last latitude and longitude
+    let lastLatitude = null;
+    let lastLongitude = null;
+
+    function getLastLatitude() {
+      return lastLatitude;
+    }
+
+    function getLastLongitude() {
+      return lastLongitude;
+    }
+
+    // Store the last latitude and longitude
+    latitudeRef.on('value', (snapshot) => {
+      lastLatitude = parseFloat(snapshot.val());
+    });
+
+    longitudeRef.on('value', (snapshot) => {
+      lastLongitude = parseFloat(snapshot.val());
     });
   </script>
 </body>
