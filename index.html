@@ -39,22 +39,18 @@
       appId: "1:643099207427:web:5628dd80705c3f738f6b36"
     };
 
-    // Initialize Firebase
     const firebaseApp = firebase.initializeApp(firebaseConfig);
     const db = firebaseApp.database();
     const latitudeRef = db.ref('latitude');
     const longitudeRef = db.ref('longitude');
 
-    // Create Leaflet map
     const map = L.map('map').setView([0, 0], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Initialize marker
     let marker;
 
-    // Listen for changes in the latitude and longitude nodes
     latitudeRef.on('value', (snapshot) => {
       const latitude = snapshot.val();
       const longitude = getLastLongitude();
@@ -67,9 +63,7 @@
       updateMarker(latitude, longitude);
     });
 
-    // Function to update marker position
     function updateMarker(latitude, longitude) {
-      // Check if latitude and longitude are valid
       if (!isNaN(latitude) && !isNaN(longitude)) {
         console.log("Updating marker with Latitude:", latitude, "Longitude:", longitude);
         if (!marker) {
@@ -79,12 +73,10 @@
         }
         map.setView([latitude, longitude], 13);
       } else {
-        // Handle invalid latitude or longitude
         console.error("Invalid latitude or longitude:", latitude, longitude);
       }
     }
 
-    // Helper functions to store and retrieve the last latitude and longitude
     let lastLatitude = null;
     let lastLongitude = null;
 
@@ -96,7 +88,6 @@
       return lastLongitude;
     }
 
-    // Store the last latitude and longitude
     latitudeRef.on('value', (snapshot) => {
       lastLatitude = parseFloat(snapshot.val());
     });
@@ -105,12 +96,9 @@
       lastLongitude = parseFloat(snapshot.val());
     });
 
-    // Add event listener to the button for navigation
     document.getElementById('navigate-button').addEventListener('click', () => {
-      // Replace the coordinates with the latitude and longitude from Firebase
       const latitude = lastLatitude || 0;
       const longitude = lastLongitude || 0;
-      // Open Google Maps with the coordinates for navigation
       window.open(`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`);
     });
   </script>
